@@ -67,7 +67,7 @@ def add_pokemon() -> pokemon.pokemon:
 def update_pokemon():
     print("please give the index number of the file you wish to change")
     user_file_choice = int(input(">>>"))
-    with open("C:/Users/pqppe/OneDrive/Desktop/PortableGit/2022 revature/220404-big-data/foundation project/saved_pokemon.txt", "r+") as f:
+    with open("saved_pokemon.txt", "r+") as f:
         d = f.readlines()
         f.seek(0)
         for i in d:
@@ -117,7 +117,7 @@ def delete_pokemon():
     print("please give index number of pokemon file you wish to remove")
     user_input = int(input(">>>"))
     print("deleting entry:", user_input)
-    with open("C:/Users/pqppe/OneDrive/Desktop/PortableGit/2022 revature/220404-big-data/foundation project/saved_pokemon.txt", "r+") as f:
+    with open("saved_pokemon.txt", "r+") as f:
         d = f.readlines()
         f.seek(0)
         for i in d:
@@ -125,12 +125,11 @@ def delete_pokemon():
                 f.write(i)
         f.truncate()
         f.close()
-    return
 
 # e)
 # temporarilly store and display pokemon from saved_pokemon.txt
 def display_from_file():
-    f = open('C:/Users/pqppe/OneDrive/Desktop/PortableGit/2022 revature/220404-big-data/foundation project/saved_pokemon.txt', 'r')
+    f = open('saved_pokemon.txt', 'r')
     lst_from_file = []
     for line in f:
         if line == '':
@@ -147,7 +146,7 @@ def display_from_file():
 # f)
 # Save pokemon list to saved_pokemon.txt
 def save_pokemon(lst_pokemon):
-    f = open('C:/Users/pqppe/OneDrive/Desktop/PortableGit/2022 revature/220404-big-data/foundation project/saved_pokemon.txt', 'w')
+    f = open('saved_pokemon.txt', 'w')
 
     for pokemon in lst_pokemon:
         f.write(str(pokemon.pokenumber) + ',' + str(pokemon.pokename) + ', ' + str(pokemon.type1) + ',' + str(pokemon.type2) + "\n")
@@ -156,7 +155,7 @@ def save_pokemon(lst_pokemon):
 
 # Load pokemon from saved_pokemon.txt
 def load_pokemon():
-    f = open('C:/Users/pqppe/OneDrive/Desktop/PortableGit/2022 revature/220404-big-data/foundation project/saved_pokemon.txt', 'r')
+    f = open('saved_pokemon.txt', 'r')
     lst_pokemon = []
     for line in f:
         if line == '':
@@ -258,8 +257,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
