@@ -9,7 +9,9 @@ import pokemon
 import re
 from pymongo import MongoClient
 
+# a)
 # Used to create pokemon object from user-inputted values
+
 def add_pokemon() -> pokemon.pokemon:
     # Input verification
     while True:
@@ -59,41 +61,7 @@ def add_pokemon() -> pokemon.pokemon:
     newPokemon = pokemon.pokemon(pokenumber, pokename, type1, type2)
     return newPokemon
 
-# Save pokemon list to saved_pokemon.txt
-def save_pokemon(lst_pokemon):
-    f = open('C:/Users/pqppe/OneDrive/Desktop/PortableGit/2022 revature/220404-big-data/foundation project/saved_pokemon.txt', 'w')
-
-    for pokemon in lst_pokemon:
-        f.write(str(pokemon.pokenumber) + ',' + str(pokemon.pokename) + ', ' + str(pokemon.type1) + ',' + str(pokemon.type2) + "\n")
-
-    f.close()
-
-# Load pokemon from saved_pokemon.txt
-def load_pokemon():
-    f = open('C:/Users/pqppe/OneDrive/Desktop/PortableGit/2022 revature/220404-big-data/foundation project/saved_pokemon.txt', 'r')
-    lst_pokemon = []
-    for line in f:
-        if line == '':
-            break
-
-        pokemon_data = line.split(',')
-        newPokemon = pokemon.pokemon(pokemon_data[0], pokemon_data[1], pokemon_data[2], pokemon_data[3])
-
-        lst_pokemon.append(newPokemon)
-    f.close()
-    return lst_pokemon
-
-# Function to save an pokemon to collection in MongoDB
-def save_to_db(pokemon, pokedex):
-    dict_pokemon = {
-        "index" : pokemon.pokenumber,
-        "name" : pokemon.name,
-        "type" : pokemon.type1,
-        "subtype" : pokemon.type2
-    }
-
-    pokedex.pokemon.insert_one(dict_pokemon)
-
+# b)
 # funciton to update element
 
 def update_pokemon():
@@ -141,7 +109,8 @@ def update_pokemon():
                         pass
 
     f.truncate()
-            
+
+# d)            
 # function to delete element
 
 def delete_pokemon():
@@ -157,6 +126,60 @@ def delete_pokemon():
         f.truncate()
         f.close()
     return
+
+# e)
+# temporarilly store and display pokemon from saved_pokemon.txt
+def display_from_file():
+    f = open('C:/Users/pqppe/OneDrive/Desktop/PortableGit/2022 revature/220404-big-data/foundation project/saved_pokemon.txt', 'r')
+    lst_from_file = []
+    for line in f:
+        if line == '':
+            break
+
+        pokemon_data = line.split(',')
+        newPokemon = pokemon.pokemon(pokemon_data[0], pokemon_data[1], pokemon_data[2], pokemon_data[3])
+
+        lst_from_file.append(newPokemon)
+    f.close()
+    for pokemon in lst_from_file:
+        print(pokemon, type(pokemon))
+
+# f)
+# Save pokemon list to saved_pokemon.txt
+def save_pokemon(lst_pokemon):
+    f = open('C:/Users/pqppe/OneDrive/Desktop/PortableGit/2022 revature/220404-big-data/foundation project/saved_pokemon.txt', 'w')
+
+    for pokemon in lst_pokemon:
+        f.write(str(pokemon.pokenumber) + ',' + str(pokemon.pokename) + ', ' + str(pokemon.type1) + ',' + str(pokemon.type2) + "\n")
+
+    f.close()
+
+# Load pokemon from saved_pokemon.txt
+def load_pokemon():
+    f = open('C:/Users/pqppe/OneDrive/Desktop/PortableGit/2022 revature/220404-big-data/foundation project/saved_pokemon.txt', 'r')
+    lst_pokemon = []
+    for line in f:
+        if line == '':
+            break
+
+        pokemon_data = line.split(',')
+        newPokemon = pokemon.pokemon(pokemon_data[0], pokemon_data[1], pokemon_data[2], pokemon_data[3])
+
+        lst_pokemon.append(newPokemon)
+    f.close()
+    return lst_pokemon
+
+# s)
+# Function to save an pokemon to collection in MongoDB
+def save_to_db(pokemon, pokedex):
+    dict_pokemon = {
+        "index" : pokemon.pokenumber,
+        "name" : pokemon.name,
+        "type" : pokemon.type1,
+        "subtype" : pokemon.type2
+    }
+
+    pokedex.pokemon.insert_one(dict_pokemon)
 
 #Main function
 def main():
@@ -175,9 +198,10 @@ def main():
             print("Hello! Please select action")
             print("\t a) add file")
             print("\t b) change information in a file")
-            print("\t c) display all files")
+            print("\t c) display all files currently in console")
             print("\t d) delete file")
-            print("\t e) save file to saved_pokemon.txt")
+            print("\t e) display all files currently in saved text file")
+            print("\t f) save file to saved_pokemon.txt")
             print("\t s) Save all Pokemon to MongoDB (only run once!)")
             print("\t q) quit program")
             user_input = input(">>>")
@@ -198,10 +222,10 @@ def main():
             elif user_input == 'd':
                 delete_pokemon()
     
-            elif user_input == 'q':
-                break
-
             elif user_input == 'e':
+                display_from_file()
+
+            elif user_input == 'f':
                 save_pokemon(lst_pokemon)
 
             elif user_input == 's' and check_conn:
@@ -213,6 +237,9 @@ def main():
 
             elif user_input == 's' and not check_conn:
                 print("Sorry! Connection to db not established")
+
+            elif user_input == 'q':
+                break
 
             else:
                 raise ValueError('Invalid menu option')
