@@ -202,7 +202,7 @@ def Edit_from_db(pokedex):
         print("please enter new sub type for pokemon")
         user_entry = (input(">>>"))
         pokedex.update_one({"index": user_index}, { "$set": {"type2": user_entry}})
-    elif:
+    else:
         print("sorry, invalid selection")
 
 #MDelete)
