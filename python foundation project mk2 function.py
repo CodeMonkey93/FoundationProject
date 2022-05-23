@@ -107,8 +107,7 @@ def update_pokemon():
                         print(ve)
                         print("Please enter a valid command")
                         pass
-
-    f.truncate()
+        f.close()
 
 # d)            
 # function to delete element
@@ -123,7 +122,6 @@ def delete_pokemon():
         for i in d:
             if re.match(str(user_input), i) == NONE:
                 f.write(i)
-        f.truncate()
         f.close()
 
 # e)
@@ -160,16 +158,14 @@ def load_pokemon():
     for line in f:
         if line == '':
             break
-
         pokemon_data = line.split(',')
         newPokemon = pokemon.pokemon(pokemon_data[0], pokemon_data[1], pokemon_data[2], pokemon_data[3])
-
         lst_pokemon.append(newPokemon)
     f.close()
     return lst_pokemon
 
 # s)
-# Function to save an pokemon to collection in MongoDB
+# Function to save a pokemon to collection in MongoDB
 def save_to_db(pokemon, pokedex):
     dict_pokemon = {
         "index" : pokemon.pokenumber,
@@ -177,15 +173,50 @@ def save_to_db(pokemon, pokedex):
         "type" : pokemon.type1,
         "subtype" : pokemon.type2
     }
-
     pokedex.pokemon.insert_one(dict_pokemon)
+
+#MDisplay)
+#function to display data from collection in MongoDB
+def display_info_from_db(pokedex):
+    print("please give index number of pokemon file you wish to display from MongoDB")
+    user_index = int(input(">>>"))
+    pokedex.find_one({"index": user_index })
+    
+#MUpdate)
+#Function to manipulate data from collection in MongoDB
+def Edit_from_db(pokedex):
+    print("please give index number of pokemon file you wish to edit in MongoDB")
+    user_index = int(input(">>>"))
+    print("please give the attribute of pokemon file you wish to edit in MongoDB")
+    print("\n 1)name of pokemon \n 2) primary attribute \n 3) sub attribute \n")
+    user_choice = int(input(">>>"))
+    if (user_choice == 1):
+        print("please enter new name for pokemon")
+        user_entry = (input(">>>"))
+        pokedex.update_one({"index": user_index}, { "$set": {"pokename": user_entry}})
+    if (user_choice == 2):
+        print("please enter new primary type for pokemon")
+        user_entry = (input(">>>"))
+        pokedex.update_one({"index": user_index}, { "$set": {"type1": user_entry}})
+    if (user_choice == 3):
+        print("please enter new sub type for pokemon")
+        user_entry = (input(">>>"))
+        pokedex.update_one({"index": user_index}, { "$set": {"type2": user_entry}})
+    elif:
+        print("sorry, invalid selection")
+
+#MDelete)
+#Function to delete data rom collection in mongoDB
+def delete_from_db(pokedex):
+   print("please give index number of pokemon file you wish to delete from ongoDB")
+   user_input = int(input(">>>"))
+   pokedex.delete_one({"index": user_input})
 
 #Main function
 def main():
     check_conn = True
     try:
         client = MongoClient("127.0.0.1", 27017)
-
         pokedex = client.pokemon
     except BaseException:
         print("Sorry, could not connect!")
@@ -202,6 +233,9 @@ def main():
             print("\t e) display all files currently in saved text file")
             print("\t f) save file to saved_pokemon.txt")
             print("\t s) Save all Pokemon to MongoDB (only run once!)")
+            print("\t MDisplay) Display a file from MongoDB")
+            print("\t MUpdate) Update a file from MongoDB")
+            print("\t MDelete) Delete a file from MongoDB")
             print("\t q) quit program")
             user_input = input(">>>")
 
@@ -231,6 +265,24 @@ def main():
                 try:
                     for pokemon in lst_pokemon:
                         save_to_db(pokemon, pokedex)
+                except BaseException:
+                    print("Sorry, could not make a good connection to db!")
+
+            elif user_input == 'MDisplay' and check_conn:
+                try:
+                    display_info_from_db(pokedex)
+                except BaseException:
+                    print("Sorry, could not make a good connection to db!")
+
+            elif user_input == 'MUpdate' and check_conn:
+                try:
+                    Edit_from_db(pokedex)
+                except BaseException:
+                    print("Sorry, could not make a good connection to db!")
+            
+            elif user_input == 'MDelete' and check_conn:
+                try:
+                    delete_from_db(pokedex)
                 except BaseException:
                     print("Sorry, could not make a good connection to db!")
 
